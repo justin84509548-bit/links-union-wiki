@@ -1,0 +1,16 @@
+.vercel
+node_modules/
+dist/
+.npm-cache/
+.vercel-cache/
+.vercel-data/
+tmp/
+output/
+*.log
+audit-*.png
+qa-*.png
+.npmrc
+AGENTS.md
+design-qa.md
+feedback-summary-*.md
+interaction-audit.md
