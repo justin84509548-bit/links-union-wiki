@@ -16,6 +16,20 @@ const process = [
   ["04", "Enamel protected", "Targeted action reduces harmful bacteria while supporting everyday oral care.", "As acidity falls, the gel rests again and avoids unnecessary release."],
 ];
 
+const processVisuals = [
+  "/assets/braces-acid-v2.png",
+  "/assets/braces-monitoring-v2.png",
+  "/assets/shield-tooth.png",
+  "/assets/braces.png",
+];
+
+const heroMechanism = [
+  [Bug, "Acid drops", "Plaque bacteria acidify the biofilm."],
+  [WaveSine, "Gel senses", "The responsive network begins to swell."],
+  [TestTube, "AMP releases", "Protection moves to the threatened area."],
+  [ShieldCheck, "Enamel protected", "Local action supports a healthier smile."],
+];
+
 const team = [
   ["BW", "Boxiang Wang", "CTO · Instructor"], ["JY", "JingYe", "Biological Mentor"],
   ["WE", "Wendy", "Biological Mentor"], ["YC", "YenHaoChen", "Student Researcher"],
@@ -345,10 +359,17 @@ export function App() {
             <button className="floating-germ germ-one" aria-label="Trigger an acid response" onClick={() => { setPh(5); scrollTo("description"); }}><Bug weight="fill" /></button>
             <button className="floating-germ germ-two" aria-label="Show a healthy pH" onClick={() => { setPh(7); scrollTo("description"); }}><Sparkle weight="fill" /></button>
           </div>
-          <div className="feature-ribbon" aria-label="Project highlights">
-            <article><img src="/assets/braces.png" alt="" /><div><strong>The problem</strong><span>Acid, bacteria and biofilm threaten enamel.</span></div></article>
-            <article><ShieldCheck size={40} weight="duotone" /><div><strong>Our solution</strong><span>A responsive gel releases protection on demand.</span></div></article>
-            <article><img src="/assets/pointing.png" alt="" /><div><strong>A better future</strong><span>Healthier smiles and smarter orthodontic care.</span></div></article>
+          <div className="mechanism-ribbon" aria-label="How S.H.I.E.L.D. works">
+            <span className="mechanism-kicker">The science in one glance</span>
+            <div className="mechanism-track">
+              {heroMechanism.map(([Icon, title, copy], index) => (
+                <button key={title} onClick={() => { setActiveStep(index); scrollTo("description"); }}>
+                  <span className="mechanism-icon"><Icon weight="duotone" /></span>
+                  <span className="mechanism-copy"><strong>{title}</strong><small>{copy}</small></span>
+                  {index < heroMechanism.length - 1 && <ArrowRight className="mechanism-arrow" weight="bold" aria-hidden="true" />}
+                </button>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -369,9 +390,17 @@ export function App() {
             ))}
           </div>
           <div className="process-explainer" id="process-explainer" aria-live="polite">
-            <span>Step {activeStep + 1} of 4</span>
-            <div><strong>{process[activeStep][1]}</strong><p>{process[activeStep][3]}</p></div>
-            <div className="step-dots" aria-hidden="true">{process.map(([, title], index) => <i className={index <= activeStep ? "done" : ""} key={title} />)}</div>
+            <div className={`process-scene process-scene-${activeStep}`}>
+              <span className="process-bubble bubble-one" aria-hidden="true" />
+              <span className="process-bubble bubble-two" aria-hidden="true" />
+              <img key={activeStep} src={processVisuals[activeStep]} alt={`Cartoon tooth showing step ${activeStep + 1}: ${process[activeStep][1]}`} />
+            </div>
+            <div className="process-story-copy">
+              <span>Step {activeStep + 1} of 4</span>
+              <strong>{process[activeStep][1]}</strong>
+              <p>{process[activeStep][3]}</p>
+              <div className="step-dots" aria-hidden="true">{process.map(([, title], index) => <i className={index <= activeStep ? "done" : ""} key={title} />)}</div>
+            </div>
           </div>
           <div className={`ph-lab ${phState.level}`}>
             <div className="ph-copy">
