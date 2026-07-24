@@ -11,23 +11,46 @@ const navItems = [
 
 const process = [
   ["01", "Acid detected", "Plaque bacteria metabolize sugar and push the local pH below the healthy range.", "The local environment becomes acidic enough to threaten enamel."],
-  ["02", "Gel responds", "The pH-sensitive hydrogel swells and opens precisely where the acid attack begins.", "The material changes shape automatically—no button or brushing step is needed."],
-  ["03", "AMP released", "Antimicrobial peptides are released close to the orthodontic biofilm.", "Protection is delivered locally instead of flooding the whole mouth."],
-  ["04", "Enamel protected", "Targeted action reduces harmful bacteria while supporting everyday oral care.", "As acidity falls, the gel rests again and avoids unnecessary release."],
+  ["02", "Gel responds", "The pH-sensitive hydrogel opens precisely where the acid attack begins.", "The material changes automatically as the local environment becomes acidic."],
+  ["03", "AMP defends", "Antimicrobial peptides are released close to the acidogenic biofilm.", "The first response targets bacterial activity and helps reduce continued acid production."],
+  ["04", "ALP rebuilds", "Alkaline phosphatase supports phosphate availability for enamel remineralization.", "The second response supports mineral repair after the bacterial challenge is controlled."],
 ];
 
 const processVisuals = [
   "/assets/braces-acid-v2.png",
   "/assets/braces-monitoring-v2.png",
-  "/assets/shield-tooth.png",
-  "/assets/braces.png",
+  "/assets/amp-knight.png",
+  "/assets/alp-doctor.png",
 ];
 
 const heroMechanism = [
-  [Bug, "Acid drops", "Plaque bacteria acidify the biofilm."],
+  [Bug, "Acid attack", "S. mutans acidifies the biofilm."],
   [WaveSine, "Gel senses", "The responsive network begins to swell."],
-  [TestTube, "AMP releases", "Protection moves to the threatened area."],
-  [ShieldCheck, "Enamel protected", "Local action supports a healthier smile."],
+  [ShieldCheck, "AMP defends", "The antimicrobial response targets bacteria."],
+  [Sparkle, "ALP rebuilds", "The mineral response supports enamel repair."],
+];
+
+const narrativeScenes = [
+  {
+    eyebrow: "01 / Zoom into the damage",
+    title: "A small white spot can signal a bigger problem.",
+    copy: "Around brackets, trapped plaque creates a hard-to-clean microenvironment. Early mineral loss can begin before a cavity is obvious.",
+  },
+  {
+    eyebrow: "02 / Follow the acid",
+    title: "S. mutans turns sugar into an acid challenge.",
+    copy: "Acidogenic biofilms push the local pH downward. When mineral loss outpaces repair, enamel becomes porous and vulnerable.",
+  },
+  {
+    eyebrow: "03 / See the scale",
+    title: "Oral disease affects billions, but protection is still uneven.",
+    copy: "WHO estimates that oral diseases affect nearly 3.7 billion people. Regional comparison data will be added after team and teacher review.",
+  },
+  {
+    eyebrow: "04 / Close the protection gap",
+    title: "Useful products exist. The unmet need is sustained, responsive care.",
+    copy: "Many approaches depend on repeated use, have limited retention, or focus on only one part of the problem. S.H.I.E.L.D. is designed to combine antimicrobial defense with remineralization support.",
+  },
 ];
 
 const team = [
@@ -253,7 +276,7 @@ function FactModal({ onClose }) {
         <button className="modal-close" onClick={onClose} aria-label="Close"><X size={22} /></button>
         <span className="mini-label"><Flask size={16} weight="fill" /> The idea in 30 seconds</span>
         <h2 id="modal-title">A tiny material with a smart response.</h2>
-        <p>Braces create hard-to-clean spaces where acidogenic biofilms persist. S.H.I.E.L.D. combines a pH-responsive hydrogel with a targeted antimicrobial peptide so protection activates when the local environment becomes acidic.</p>
+        <p>Braces create hard-to-clean spaces where acidogenic biofilms persist. S.H.I.E.L.D. combines a pH-responsive hydrogel with AMP antimicrobial defense and ALP-supported remineralization.</p>
         <button className="primary-button" onClick={() => { onClose(); scrollTo("description"); }}>See the science <ArrowRight weight="bold" /></button>
       </article>
     </div>
@@ -263,6 +286,7 @@ function FactModal({ onClose }) {
 export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [activeNarrative, setActiveNarrative] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [ph, setPh] = useState(6.2);
   const [burst, setBurst] = useState(false);
@@ -280,6 +304,18 @@ export function App() {
     const close = (event) => event.key === "Escape" && setModalOpen(false);
     window.addEventListener("keydown", close);
     return () => window.removeEventListener("keydown", close);
+  }, []);
+
+  useEffect(() => {
+    const steps = document.querySelectorAll(".narrative-step");
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) setActiveNarrative(Number(entry.target.dataset.scene));
+      }),
+      { threshold: 0.56, rootMargin: "-12% 0px -22%" },
+    );
+    steps.forEach((step) => observer.observe(step));
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -344,13 +380,13 @@ export function App() {
           <div className="hero-sparkles" aria-hidden="true"><Sparkle /><Sparkle /><Sparkle /></div>
           <div className="hero-copy cloud-card" data-reveal>
             <span className="version-badge">S.H.I.E.L.D. · LINKS-UNION</span>
-            <h1>Tiny Gel,<br /><span>Big Protection!</span></h1>
-            <p>A smart hydrogel that senses acidity and helps protect enamel around braces—all around the clock.</p>
+            <h1>Fight Acid.<br /><span>Rebuild Enamel.</span></h1>
+            <p>A pH-responsive hydrogel coating designed to combine long-lasting antimicrobial defense with enamel remineralization support.</p>
             <div className="hero-actions">
               <button className="primary-button" onClick={() => scrollTo("description")}>Explore S.H.I.E.L.D. <ArrowRight weight="bold" /></button>
               <button className="secondary-button" onClick={() => setModalOpen(true)}>Learn more <CaretDown weight="bold" /></button>
             </div>
-            <span className="scribble-note"><Dna size={20} /> pH-responsive · targeted · gentle</span>
+            <span className="scribble-note"><Dna size={20} /> sense · defend · rebuild</span>
           </div>
           <div className="hero-art interactive-art" onPointerMove={tiltHero} onPointerLeave={resetTilt} data-reveal>
             <img src="/assets/shield-scene.png" alt="Cartoon tooth with braces protected by a hydrogel shield" />
@@ -373,11 +409,140 @@ export function App() {
           </div>
         </section>
 
+        <section className="home-narrative" aria-labelledby="narrative-title">
+          <div className="narrative-intro" data-reveal>
+            <span className="mini-label"><Sparkle weight="fill" /> The S.H.I.E.L.D. story</span>
+            <h2 id="narrative-title">From hidden acid attack<br />to active enamel repair.</h2>
+            <p>Scroll through the problem, the protection gap, and our dual-action response.</p>
+          </div>
+
+          <div className="narrative-layout">
+            <div className={`narrative-stage narrative-scene-${activeNarrative}`} aria-live="polite">
+              <div className="narrative-progress" aria-hidden="true">
+                {narrativeScenes.map((scene, index) => <i className={index === activeNarrative ? "active" : ""} key={scene.eyebrow} />)}
+              </div>
+
+              <div className="visual-scene mouth-visual" aria-hidden={activeNarrative !== 0}>
+                <div className="face-crop">
+                  <span className="cheek cheek-left" /><span className="cheek cheek-right" />
+                  <div className="open-mouth">
+                    <div className="teeth-arc">
+                      <span /><span /><span className="damaged-tooth"><i /></span><span /><span />
+                    </div>
+                  </div>
+                  <div className="focus-ring"><span>early demineralization</span></div>
+                </div>
+              </div>
+
+              <div className="visual-scene bacteria-visual" aria-hidden={activeNarrative !== 1}>
+                <div className="microscope-lens">
+                  <img src="/assets/braces-acid-v2.png" alt="" />
+                  <Bug className="story-bug bug-a" weight="fill" />
+                  <Bug className="story-bug bug-b" weight="fill" />
+                  <Bug className="story-bug bug-c" weight="fill" />
+                  <span className="acid-drop drop-a" /><span className="acid-drop drop-b" /><span className="acid-drop drop-c" />
+                  <div className="ph-fall"><span>pH</span><strong>7.0</strong><i /><strong>5.0</strong></div>
+                </div>
+              </div>
+
+              <div className="visual-scene globe-visual" aria-hidden={activeNarrative !== 2}>
+                <div className="globe-sphere">
+                  <span className="continent continent-a" /><span className="continent continent-b" /><span className="continent continent-c" />
+                  <i className="map-dot dot-a" /><i className="map-dot dot-b" /><i className="map-dot dot-c" /><i className="map-dot dot-d" />
+                  <div className="burden-number"><strong>3.7B</strong><span>people affected by oral diseases</span></div>
+                </div>
+                <span className="review-badge">Regional map data awaiting review</span>
+              </div>
+
+              <div className="visual-scene gap-visual" aria-hidden={activeNarrative !== 3}>
+                <div className="market-shelf">
+                  <article><TestTube weight="duotone" /><strong>Toothpaste</strong><span>Repeated use</span></article>
+                  <article><Flask weight="duotone" /><strong>Mouth rinse</strong><span>Short retention</span></article>
+                  <article><ShieldCheck weight="duotone" /><strong>Topical care</strong><span>Focused function</span></article>
+                </div>
+                <ArrowRight className="gap-arrow" weight="bold" />
+                <div className="solution-orb">
+                  <img className="solution-tooth" src="/assets/shield-tooth.png" alt="" />
+                  <img className="solution-amp" src="/assets/amp-knight.png" alt="" />
+                  <img className="solution-alp" src="/assets/alp-doctor.png" alt="" />
+                  <strong>Dual action</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="narrative-steps">
+              {narrativeScenes.map((scene, index) => (
+                <button
+                  className={index === activeNarrative ? "narrative-step active" : "narrative-step"}
+                  data-scene={index}
+                  key={scene.eyebrow}
+                  onClick={() => setActiveNarrative(index)}
+                  aria-pressed={index === activeNarrative}
+                >
+                  <span>{scene.eyebrow}</span>
+                  <h3>{scene.title}</h3>
+                  <p>{scene.copy}</p>
+                  <i>Explore scene <ArrowRight weight="bold" /></i>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="solution-transition" data-reveal>
+            <span>When passive protection is not enough</span>
+            <ArrowRight weight="bold" />
+            <strong>the material should respond.</strong>
+          </div>
+
+          <div className="dual-action-intro" data-reveal>
+            <span className="mini-label"><ShieldCheck weight="fill" /> One coating, two coordinated jobs</span>
+            <h2>First defend. Then rebuild.</h2>
+            <p>AMP and ALP are presented separately so each mechanism stays clear.</p>
+          </div>
+
+          <article className="action-module amp-module" data-reveal>
+            <div className="action-copy">
+              <span className="action-number">01 / AMP defense</span>
+              <h3>The molecular knight answers the acid alarm.</h3>
+              <p>When the local environment acidifies, the hydrogel releases AMP close to the biofilm. The animation shows bacterial pressure and acid production falling progressively—not an instant sterilization claim.</p>
+              <div className="action-equation"><strong>Low pH</strong><ArrowRight /><strong>Gel response</strong><ArrowRight /><strong>AMP defense</strong></div>
+            </div>
+            <div className="action-stage amp-stage" aria-label="Animated AMP defense illustration">
+              <div className="hydrogel-wave" />
+              <img className="action-tooth" src="/assets/braces-acid-v2.png" alt="Cartoon tooth under an acid challenge" />
+              <Bug className="module-bug module-bug-a" weight="fill" />
+              <Bug className="module-bug module-bug-b" weight="fill" />
+              <Bug className="module-bug module-bug-c" weight="fill" />
+              <img className="amp-character" src="/assets/amp-knight.png" alt="Cartoon AMP molecular knight" />
+              <span className="signal-pill">acid sensed</span>
+            </div>
+          </article>
+
+          <article className="action-module alp-module" data-reveal>
+            <div className="action-stage alp-stage" aria-label="Animated ALP remineralization illustration">
+              <img className="action-tooth repaired-tooth" src="/assets/braces-monitoring-v2.png" alt="Cartoon tooth beginning enamel repair" />
+              <div className="enamel-patch"><i /><i /><i /><i /><i /></div>
+              <img className="alp-character" src="/assets/alp-doctor.png" alt="Cartoon ALP repair doctor" />
+              <span className="mineral-particle particle-cagp">CaGP</span>
+              <span className="mineral-particle particle-pi">Pi</span>
+              <span className="mineral-particle particle-ca">Ca²⁺</span>
+              <span className="mineral-particle particle-hap">HAp</span>
+            </div>
+            <div className="action-copy">
+              <span className="action-number">02 / ALP remineralization</span>
+              <h3>The repair doctor brings mineral building blocks back.</h3>
+              <p>ALP supports phosphate release from CaGP. Pi and available Ca²⁺ contribute to HAp formation, supporting repair of the demineralized enamel surface.</p>
+              <div className="action-equation"><strong>CaGP</strong><ArrowRight /><strong>Pi + Ca²⁺</strong><ArrowRight /><strong>HAp repair</strong></div>
+              <small>Mechanism wording remains subject to Wet Lab and teacher verification.</small>
+            </div>
+          </article>
+        </section>
+
         <section className="section shield-section story-section" id="description">
           <div className="section-heading" data-reveal>
             <span className="mini-label section-label"><ShieldCheck weight="fill" /> 01 · Project description</span>
-            <h2>Protection that wakes up<br />when the pH drops.</h2>
-            <p>S.H.I.E.L.D. turns a hidden chemical change into a local, timely protective response.</p>
+            <h2>A coordinated response<br />to acid and mineral loss.</h2>
+            <p>S.H.I.E.L.D. turns a hidden chemical change into local antimicrobial defense followed by remineralization support.</p>
           </div>
           <div className="process-grid" data-reveal>
             {process.map(([number, title, copy], index) => (
@@ -430,15 +595,15 @@ export function App() {
           <div className="project-art"><img src="/assets/lab-researcher-v2.png" alt="Cartoon laboratory researcher holding a test tube" /></div>
           <div className="project-copy">
             <span className="mini-label section-label"><TestTube weight="fill" /> 02 · Design</span>
-            <h2>Built as a four-part protection system.</h2>
-            <p>Each layer has one clear job—from sensing the acidic microenvironment to helping an antimicrobial peptide reach the right place.</p>
-            <div className="system-list">
-              {[
-                ["pH sensor", "Detects local acidification from bacterial metabolism."],
-                ["Signal transducer", "The hydrogel network changes structure as pH falls."],
-                ["Effector (AMP)", "A fusion protein binds near enamel and targets bacterial membranes."],
-                ["Production chassis", "Engineered or cell-free expression supports sustainable production."],
-              ].map(([title, copy]) => <article key={title}><CheckCircle weight="fill" /><div><h3>{title}</h3><p>{copy}</p></div></article>)}
+              <h2>Built as a dual-action protection system.</h2>
+              <p>Each layer has one clear job—from sensing the acidic microenvironment to coordinating AMP defense and ALP-supported repair.</p>
+              <div className="system-list">
+                {[
+                  ["pH sensor", "Detects local acidification from bacterial metabolism."],
+                  ["Signal transducer", "The hydrogel network changes structure as pH falls."],
+                  ["AMP defense", "The antimicrobial module acts close to the acidogenic biofilm."],
+                  ["ALP repair", "The mineralization module supports phosphate availability and HAp repair."],
+                ].map(([title, copy]) => <article key={title}><CheckCircle weight="fill" /><div><h3>{title}</h3><p>{copy}</p></div></article>)}
             </div>
           </div>
         </section>
