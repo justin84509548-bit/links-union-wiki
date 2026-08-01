@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight, Bug, CaretDown, CheckCircle, Dna, Flask,
   List, ShieldCheck, Sparkle, TestTube, X, WaveSine,
@@ -260,6 +260,72 @@ function FactModal({ onClose }) {
   );
 }
 
+function GermSpearCursor() {
+  const cursorRef = useRef(null);
+
+  useEffect(() => {
+    const finePointer = window.matchMedia("(pointer: fine)");
+    if (!finePointer.matches) return undefined;
+
+    const cursor = cursorRef.current;
+    if (!cursor) return undefined;
+
+    document.documentElement.classList.add("has-germ-cursor");
+    let frame = 0;
+    let strikeTimer = 0;
+    let x = -100;
+    let y = -100;
+
+    const draw = () => {
+      cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      frame = 0;
+    };
+    const move = (event) => {
+      x = event.clientX;
+      y = event.clientY;
+      cursor.classList.add("is-visible");
+      cursor.classList.toggle("is-aiming", Boolean(event.target.closest("a, button, input, [role='button']")));
+      if (!frame) frame = requestAnimationFrame(draw);
+    };
+    const strike = () => {
+      window.clearTimeout(strikeTimer);
+      cursor.classList.remove("is-striking");
+      void cursor.offsetWidth;
+      cursor.classList.add("is-striking");
+      strikeTimer = window.setTimeout(() => cursor.classList.remove("is-striking"), 260);
+    };
+    const hide = () => cursor.classList.remove("is-visible", "is-aiming");
+
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", strike, { passive: true });
+    document.documentElement.addEventListener("mouseleave", hide);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(strikeTimer);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", strike);
+      document.documentElement.removeEventListener("mouseleave", hide);
+      document.documentElement.classList.remove("has-germ-cursor");
+    };
+  }, []);
+
+  return (
+    <div className="germ-spear-cursor" ref={cursorRef} aria-hidden="true">
+      <span className="cursor-spear"><i /></span>
+      <span className="cursor-germ">
+        <i className="germ-eye eye-left" />
+        <i className="germ-eye eye-right" />
+        <i className="germ-mouth" />
+        <i className="germ-spot spot-one" />
+        <i className="germ-spot spot-two" />
+        <i className="germ-arm" />
+      </span>
+      <span className="cursor-impact"><i /><i /><i /></span>
+    </div>
+  );
+}
+
 export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -338,6 +404,7 @@ export function App() {
 
   return (
     <>
+      <GermSpearCursor />
       <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main>
         <section className="hero" id="home">
