@@ -260,7 +260,7 @@ function FactModal({ onClose }) {
   );
 }
 
-function GermSpearCursor() {
+function ToothSpearCursor() {
   const cursorRef = useRef(null);
 
   useEffect(() => {
@@ -270,7 +270,7 @@ function GermSpearCursor() {
     const cursor = cursorRef.current;
     if (!cursor) return undefined;
 
-    document.documentElement.classList.add("has-germ-cursor");
+    document.documentElement.classList.add("has-tooth-cursor");
     let frame = 0;
     let strikeTimer = 0;
     let x = -100;
@@ -306,21 +306,13 @@ function GermSpearCursor() {
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerdown", strike);
       document.documentElement.removeEventListener("mouseleave", hide);
-      document.documentElement.classList.remove("has-germ-cursor");
+      document.documentElement.classList.remove("has-tooth-cursor");
     };
   }, []);
 
   return (
-    <div className="germ-spear-cursor" ref={cursorRef} aria-hidden="true">
-      <span className="cursor-spear"><i /></span>
-      <span className="cursor-germ">
-        <i className="germ-eye eye-left" />
-        <i className="germ-eye eye-right" />
-        <i className="germ-mouth" />
-        <i className="germ-spot spot-one" />
-        <i className="germ-spot spot-two" />
-        <i className="germ-arm" />
-      </span>
+    <div className="tooth-spear-cursor" ref={cursorRef} aria-hidden="true">
+      <img src="/assets/tooth-warrior-cursor.png" alt="" />
       <span className="cursor-impact"><i /><i /><i /></span>
     </div>
   );
@@ -404,7 +396,7 @@ export function App() {
 
   return (
     <>
-      <GermSpearCursor />
+      <ToothSpearCursor />
       <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main>
         <section className="hero" id="home">
