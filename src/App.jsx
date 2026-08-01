@@ -3,6 +3,8 @@ import {
   ArrowRight, Bug, CaretDown, CheckCircle, Dna, Flask,
   List, ShieldCheck, Sparkle, TestTube, X, WaveSine,
 } from "@phosphor-icons/react";
+import { WikiPage } from "./WikiPage.jsx";
+import { fallbackPage, navGroups, pageByPath } from "./wikiData.jsx";
 
 const navItems = [
   ["home", "Home"], ["description", "Description"], ["design", "Design"],
@@ -246,6 +248,51 @@ function Header({ menuOpen, setMenuOpen }) {
   );
 }
 
+function SiteHeader({ menuOpen, setMenuOpen, path, navigate }) {
+  const [openGroup, setOpenGroup] = useState("");
+  function go(event, target) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    navigate(target);
+    setMenuOpen(false);
+    setOpenGroup("");
+  }
+  return (
+    <header className="header-shell">
+      <nav className="nav" aria-label="Main navigation">
+        <a className="brand" href="/" onClick={(event) => go(event, "/")} aria-label="LINKS-UNION home">
+          <span className="brand-avatar"><img src="/assets/links-union-logo.jpg" alt="" /></span><span>LINKS–UNION</span>
+        </a>
+        <div className={menuOpen ? "nav-links open" : "nav-links"}>
+          {navGroups.map((group) => {
+            const active = group.path === "/" ? path === "/" : path === group.path || path.startsWith(`${group.path}/`);
+            return (
+              <div className={`nav-group ${openGroup === group.path ? "expanded" : ""}`} key={group.path} onMouseEnter={() => group.children && setOpenGroup(group.path)} onMouseLeave={() => setOpenGroup("")}>
+                <div className="nav-group-main">
+                  <a className={active ? "active" : ""} href={group.path} onClick={(event) => go(event, group.path)}>{group.label}</a>
+                  {group.children && <button className="dropdown-toggle" onClick={() => setOpenGroup(openGroup === group.path ? "" : group.path)} aria-expanded={openGroup === group.path} aria-label={`Open ${group.label} menu`}><CaretDown weight="bold" /></button>}
+                </div>
+                {group.children && <div className="nav-dropdown">{group.children.map(([label, target]) => <a className={path === target ? "active" : ""} href={target} onClick={(event) => go(event, target)} key={target}>{label}<ArrowRight weight="bold" /></a>)}</div>}
+              </div>
+            );
+          })}
+        </div>
+        <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X size={24} /> : <List size={24} />}</button>
+      </nav>
+    </header>
+  );
+}
+
+function Footer({ navigate }) {
+  return (
+    <footer className="site-footer">
+      <div><strong>LINKS–UNION</strong><span>S.H.I.E.L.D. · Smart Hydrogel for Orthodontic Enamel Protection</span></div>
+      <nav aria-label="Footer navigation">{navGroups.slice(0, 6).map((group) => <a href={group.path} onClick={(event) => { event.preventDefault(); navigate(group.path); }} key={group.path}>{group.label}</a>)}</nav>
+      <span>© 2026</span>
+    </footer>
+  );
+}
+
 function FactModal({ onClose }) {
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
@@ -320,6 +367,7 @@ function ToothSpearCursor() {
 
 export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [path, setPath] = useState(() => window.location.pathname.replace(/\/$/, "") || "/");
   const [modalOpen, setModalOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [ph, setPh] = useState(6.2);
@@ -333,6 +381,20 @@ export function App() {
 
   const modelTopic = researchTopics.find((topic) => topic.id === "model");
   const resultsTopic = researchTopics.find((topic) => topic.id === "results");
+
+  function navigate(target) {
+    const cleanTarget = target.replace(/\/$/, "") || "/";
+    if (cleanTarget !== path) window.history.pushState({}, "", cleanTarget);
+    setPath(cleanTarget);
+    setMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  useEffect(() => {
+    const syncPath = () => setPath(window.location.pathname.replace(/\/$/, "") || "/");
+    window.addEventListener("popstate", syncPath);
+    return () => window.removeEventListener("popstate", syncPath);
+  }, []);
 
   useEffect(() => {
     const close = (event) => event.key === "Escape" && setModalOpen(false);
@@ -372,7 +434,7 @@ export function App() {
       window.removeEventListener("scroll", revealPassedItems);
       observer.disconnect();
     };
-  }, []);
+  }, [path]);
 
   function tiltHero(event) {
     const box = event.currentTarget.getBoundingClientRect();
@@ -394,10 +456,21 @@ export function App() {
     window.setTimeout(() => setBurst(false), 1500);
   }
 
+  if (path !== "/") {
+    return (
+      <>
+        <ToothSpearCursor />
+        <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} path={path} navigate={navigate} />
+        <WikiPage page={pageByPath[path] ?? fallbackPage} navigate={navigate} />
+        <Footer navigate={navigate} />
+      </>
+    );
+  }
+
   return (
     <>
       <ToothSpearCursor />
-      <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} path={path} navigate={navigate} />
       <main>
         <section className="hero" id="home">
           <div className="hero-sparkles" aria-hidden="true"><Sparkle /><Sparkle /><Sparkle /></div>
@@ -612,7 +685,7 @@ export function App() {
           <button className="primary-button" onClick={triggerBurst}>Celebrate &amp; replay <Sparkle weight="fill" /></button>
         </section>
       </main>
-      <footer><strong>LINKS–UNION</strong><span>S.H.I.E.L.D. · Smart Hydrogel for Orthodontic Enamel Protection</span><span>© 2026</span></footer>
+      <Footer navigate={navigate} />
       {modalOpen && <FactModal onClose={() => setModalOpen(false)} />}
     </>
   );
