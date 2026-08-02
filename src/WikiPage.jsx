@@ -87,12 +87,21 @@ export function WikiPage({ page, navigate }) {
   useEffect(() => {
     setActiveId(window.location.hash.slice(1) || page.chapters[0]?.id || "");
     const sections = [...document.querySelectorAll("[data-chapter]")];
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-      if (visible[0]) setActiveId(visible[0].target.id);
-    }, { rootMargin: "-22% 0px -62% 0px", threshold: [0, .08, .25] });
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    let frame = 0;
+    const updateActiveChapter = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const readingLine = window.innerHeight * .38;
+        let current = sections[0];
+        sections.forEach((section) => { if (section.getBoundingClientRect().top <= readingLine) current = section; });
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) current = sections.at(-1);
+        if (current) setActiveId(current.id);
+      });
+    };
+    updateActiveChapter();
+    window.addEventListener("scroll", updateActiveChapter, { passive: true });
+    window.addEventListener("resize", updateActiveChapter);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener("scroll", updateActiveChapter); window.removeEventListener("resize", updateActiveChapter); };
   }, [page]);
 
   return (
