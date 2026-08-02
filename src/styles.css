@@ -311,12 +311,40 @@ a { color: inherit; }
 .wiki-review-band { margin: 0 max(3vw,20px) 80px; padding: 48px max(5vw,28px); display: flex; align-items: center; justify-content: space-between; gap: 30px; border: 3px solid #c9c1f0; border-radius: 68px 46px 72px 50px; background: linear-gradient(135deg,#ebe7ff,#eaf8ff); }
 .wiki-review-band span { color: #6bb7e3; font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }.wiki-review-band h2 { margin: 8px 0; color: #6650b7; font-size: clamp(29px,3vw,45px); line-height: 1.05; }.wiki-review-band p { margin-bottom: 0; color: #716d91; }
 
+.chapter-page-layout { display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 38px; align-items: start; }
+.page-toc { position: sticky; top: 112px; z-index: 5; }
+.toc-mobile-toggle { display: none; }
+.toc-panel { padding: 25px 18px 20px; border: 2px solid #cbc3ef; border-radius: 31px 24px 34px 27px; background: rgba(255,255,255,.94); box-shadow: 0 16px 38px rgba(92,76,166,.1); backdrop-filter: blur(14px); }
+.toc-kicker { display: block; color: #68b8e5; font-size: 10px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+.toc-panel > strong { display: block; margin: 5px 8px 16px; color: #6255ad; font: 800 25px "Baloo 2"; }
+.toc-panel nav { display: grid; gap: 5px; }
+.toc-panel a { min-height: 44px; padding: 8px 10px; display: grid; grid-template-columns: 29px 1fr; align-items: center; gap: 4px; border-radius: 15px; color: #716d91; font-size: 12px; font-weight: 800; line-height: 1.25; text-decoration: none; transition: .2s ease; }
+.toc-panel a span { color: #aca2d7; font-size: 10px; }
+.toc-panel a:hover { color: #6554b2; background: #f4f1ff; transform: translateX(3px); }
+.toc-panel a.active { color: #fff; background: linear-gradient(135deg,#8068d6,#6755bb); box-shadow: 0 8px 20px rgba(102,83,187,.22); }
+.toc-panel a.active span { color: #dff7ff; }
+.chapter-stack { min-width: 0; display: grid; gap: 44px; }
+.wiki-chapter { padding: 48px; scroll-margin-top: 118px; border: 2px solid #d0c9f1; border-radius: 46px 34px 52px 38px; background: #fff; box-shadow: 0 18px 48px rgba(92,76,166,.08); overflow: clip; }
+.wiki-chapter:nth-child(even) { background: linear-gradient(145deg,#f8f6ff,#eefaff); }
+.chapter-heading { max-width: 820px; margin-bottom: 34px; }
+.chapter-heading > span { display: inline-flex; align-items: center; gap: 8px; color: #6bb7e3; font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.chapter-heading > span svg { width: 21px; height: 21px; }
+.chapter-heading h2 { margin: 13px 0 13px; color: #6253b0; font-size: clamp(38px,4.2vw,62px); line-height: 1; letter-spacing: -.025em; }
+.chapter-heading p { max-width: 760px; color: #716d91; font-size: 16px; line-height: 1.7; }
+.chapter-metrics { margin: 0 0 25px; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.chapter-metrics article { min-height: 88px; padding: 16px; display: grid; align-content: center; justify-items: center; border-radius: 22px; background: #f1edff; text-align: center; }
+.chapter-metrics strong { color: #7560c8; font: 800 28px "Baloo 2"; }.chapter-metrics span { color: #817a9c; font-size: 11px; font-weight: 800; }
+.wiki-chapter .wiki-content-card { min-height: 235px; }
+.chapter-timeline .wiki-section-grid, .chapter-roadmap .wiki-section-grid { grid-template-columns: 1fr; }
+.chapter-timeline .wiki-content-card, .chapter-roadmap .wiki-content-card { min-height: 165px; }
+
 .site-footer { min-height: 170px; padding: 35px 5vw; display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 30px; align-items: center; }
 .site-footer > div { display: grid; gap: 5px; }.site-footer nav { display: flex; flex-wrap: wrap; gap: 10px 18px; }.site-footer a { color: #f2efff; font-size: 12px; font-weight: 800; text-decoration: none; }.site-footer a:hover { text-decoration: underline; }
 
 @media (max-width: 1120px) {
   .brand { font-size: 17px; }.brand-avatar { width: 50px; height: 50px; }.nav-group-main > a { padding-inline: 6px; font-size: 11px; }.dropdown-toggle { width: 18px; }
   .wiki-page-hero { grid-template-columns: 1fr 1fr; gap: 36px; }.wiki-detail-layout { grid-template-columns: 1fr; }.wiki-figure-slot { min-height: 420px; position: static; grid-template-columns: .8fr 1.2fr; grid-template-rows: 1fr; }.wiki-figure-slot img { max-height: 350px; }
+  .chapter-page-layout { grid-template-columns: 205px minmax(0,1fr); gap: 22px; }.wiki-chapter { padding: 36px; }
 }
 
 @media (max-width: 780px) {
@@ -328,6 +356,7 @@ a { color: inherit; }
   .wiki-page-hero { min-height: auto; padding: calc(112px + env(safe-area-inset-top)) 20px 62px; grid-template-columns: 1fr; gap: 34px; }.wiki-hero-copy { justify-self: stretch; }.wiki-hero-copy h1 { font-size: clamp(46px,13vw,60px); overflow-wrap: anywhere; }.wiki-hero-copy > p { font-size: 16px; }.wiki-hero-actions { flex-direction: column; }.wiki-hero-actions a { width: 100%; }
   .wiki-hero-art { width: 100%; aspect-ratio: 1.08; }.wiki-metrics { margin-top: -30px; grid-template-columns: 1fr; border-radius: 30px; }.wiki-metrics article { min-height: 78px; border-right: 0; border-bottom: 2px dashed #ddd7f3; }.wiki-metrics article:last-child { border-bottom: 0; }
   .wiki-page-content { padding: 78px 20px 88px; }.wiki-section-title { text-align: left; margin-bottom: 38px; }.wiki-section-title h2 { font-size: clamp(38px,11vw,47px); }
+  .chapter-page-layout { display: block; }.page-toc { top: calc(86px + env(safe-area-inset-top)); margin-bottom: 24px; }.toc-mobile-toggle { width: 100%; min-height: 54px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; border: 2px solid #c9c0ef; border-radius: 20px; background: rgba(255,255,255,.96); color: #6554b2; font: 800 16px "Nunito"; box-shadow: 0 12px 30px rgba(92,76,166,.12); }.toc-mobile-toggle span { display: flex; align-items: center; gap: 8px; }.toc-mobile-toggle > svg { transition: transform .2s ease; }.page-toc.is-open .toc-mobile-toggle > svg { transform: rotate(180deg); }.toc-panel { display: none; margin-top: 8px; max-height: 55dvh; overflow-y: auto; border-radius: 22px; }.page-toc.is-open .toc-panel { display: block; }.toc-panel > .toc-kicker, .toc-panel > strong { display: none; }.toc-panel a { min-height: 48px; font-size: 13px; }.chapter-stack { gap: 28px; }.wiki-chapter { padding: 30px 20px; scroll-margin-top: calc(156px + env(safe-area-inset-top)); border-radius: 34px 25px 39px 28px; }.chapter-heading { margin-bottom: 26px; }.chapter-heading h2 { font-size: clamp(36px,10.8vw,48px); }.chapter-heading p { font-size: 15px; }.chapter-metrics { grid-template-columns: 1fr; }
   .wiki-hub-grid, .wiki-section-grid { grid-template-columns: 1fr; }.wiki-hub-card { min-height: 210px; }.wiki-content-card { min-height: 230px; }.layout-data .wiki-content-card:nth-child(1) { grid-column: auto; }
   .layout-timeline .wiki-content-card, .layout-roadmap .wiki-content-card { min-height: 220px; padding: 78px 24px 24px; }.layout-timeline .wiki-content-card > svg, .layout-roadmap .wiki-content-card > svg { top: 24px; left: 24px; }
   .wiki-figure-slot { min-height: 400px; grid-template-columns: 1fr; grid-template-rows: auto 1fr; }.wiki-figure-slot img { max-height: 280px; }.wiki-review-band { margin: 0 20px 55px; padding: 35px 24px; display: grid; border-radius: 38px; }.wiki-review-band a { width: 100%; }

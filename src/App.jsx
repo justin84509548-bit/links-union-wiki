@@ -248,7 +248,7 @@ function Header({ menuOpen, setMenuOpen }) {
   );
 }
 
-function SiteHeader({ menuOpen, setMenuOpen, path, navigate }) {
+function SiteHeader({ menuOpen, setMenuOpen, path, hash, navigate }) {
   const [openGroup, setOpenGroup] = useState("");
   function go(event, target) {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -260,19 +260,19 @@ function SiteHeader({ menuOpen, setMenuOpen, path, navigate }) {
   return (
     <header className="header-shell">
       <nav className="nav" aria-label="Main navigation">
-        <a className="brand" href="/" onClick={(event) => go(event, "/")} aria-label="LINKS-UNION home">
+        <a className="brand" href="/home" onClick={(event) => go(event, "/home")} aria-label="LINKS-UNION home">
           <span className="brand-avatar"><img src="/assets/links-union-logo.jpg" alt="" /></span><span>LINKS–UNION</span>
         </a>
         <div className={menuOpen ? "nav-links open" : "nav-links"}>
           {navGroups.map((group) => {
-            const active = group.path === "/" ? path === "/" : path === group.path || path.startsWith(`${group.path}/`);
+            const active = group.path === "/home" ? path === "/" || path === "/home" : path === group.path;
             return (
               <div className={`nav-group ${openGroup === group.path ? "expanded" : ""}`} key={group.path} onMouseEnter={() => group.children && setOpenGroup(group.path)} onMouseLeave={() => setOpenGroup("")}>
                 <div className="nav-group-main">
                   <a className={active ? "active" : ""} href={group.path} onClick={(event) => go(event, group.path)}>{group.label}</a>
                   {group.children && <button className="dropdown-toggle" onClick={() => setOpenGroup(openGroup === group.path ? "" : group.path)} aria-expanded={openGroup === group.path} aria-label={`Open ${group.label} menu`}><CaretDown weight="bold" /></button>}
                 </div>
-                {group.children && <div className="nav-dropdown">{group.children.map(([label, target]) => <a className={path === target ? "active" : ""} href={target} onClick={(event) => go(event, target)} key={target}>{label}<ArrowRight weight="bold" /></a>)}</div>}
+                {group.children && <div className="nav-dropdown">{group.children.map(([label, target]) => { const [targetPath, targetHash] = target.split("#"); return <a className={path === targetPath && hash === `#${targetHash}` ? "active" : ""} href={target} onClick={(event) => go(event, target)} key={target}>{label}<ArrowRight weight="bold" /></a>; })}</div>}
               </div>
             );
           })}
@@ -368,6 +368,7 @@ function ToothSpearCursor() {
 export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [path, setPath] = useState(() => window.location.pathname.replace(/\/$/, "") || "/");
+  const [hash, setHash] = useState(() => window.location.hash);
   const [modalOpen, setModalOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [ph, setPh] = useState(6.2);
@@ -383,18 +384,30 @@ export function App() {
   const resultsTopic = researchTopics.find((topic) => topic.id === "results");
 
   function navigate(target) {
-    const cleanTarget = target.replace(/\/$/, "") || "/";
-    if (cleanTarget !== path) window.history.pushState({}, "", cleanTarget);
-    setPath(cleanTarget);
+    const url = new URL(target, window.location.origin);
+    const nextPath = url.pathname.replace(/\/$/, "") || "/";
+    const nextHash = url.hash;
+    if (`${nextPath}${nextHash}` !== `${path}${hash}`) window.history.pushState({}, "", `${nextPath}${nextHash}`);
+    setPath(nextPath);
+    setHash(nextHash);
     setMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.setTimeout(() => {
+      if (nextHash) document.getElementById(nextHash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 0);
   }
 
   useEffect(() => {
-    const syncPath = () => setPath(window.location.pathname.replace(/\/$/, "") || "/");
+    const syncPath = () => { setPath(window.location.pathname.replace(/\/$/, "") || "/"); setHash(window.location.hash); };
     window.addEventListener("popstate", syncPath);
     return () => window.removeEventListener("popstate", syncPath);
   }, []);
+
+  useEffect(() => {
+    if (!hash) return;
+    const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" }), 30);
+    return () => window.clearTimeout(timer);
+  }, [path, hash]);
 
   useEffect(() => {
     const close = (event) => event.key === "Escape" && setModalOpen(false);
@@ -456,11 +469,11 @@ export function App() {
     window.setTimeout(() => setBurst(false), 1500);
   }
 
-  if (path !== "/") {
+  if (path !== "/" && path !== "/home") {
     return (
       <>
         <ToothSpearCursor />
-        <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} path={path} navigate={navigate} />
+        <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} path={path} hash={hash} navigate={navigate} />
         <WikiPage page={pageByPath[path] ?? fallbackPage} navigate={navigate} />
         <Footer navigate={navigate} />
       </>
@@ -470,7 +483,7 @@ export function App() {
   return (
     <>
       <ToothSpearCursor />
-      <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} path={path} navigate={navigate} />
+      <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} path={path} hash={hash} navigate={navigate} />
       <main>
         <section className="hero" id="home">
           <div className="hero-sparkles" aria-hidden="true"><Sparkle /><Sparkle /><Sparkle /></div>

@@ -1,8 +1,9 @@
-import { ArrowRight, CheckCircle, ImageSquare, Sparkle } from "@phosphor-icons/react";
-import { childrenFor } from "./wikiData.jsx";
+import { useEffect, useState } from "react";
+import { ArrowRight, CaretDown, CheckCircle, ImageSquare, List, Sparkle } from "@phosphor-icons/react";
 
-export function PageHero({ page }) {
+export function PageHero({ page, navigate }) {
   const Icon = page.icon;
+  const firstChapter = page.chapters[0]?.id;
   return (
     <section className={`wiki-page-hero hero-${page.layout}`}>
       <div className="wiki-hero-copy" data-reveal>
@@ -10,8 +11,8 @@ export function PageHero({ page }) {
         <h1>{page.title}</h1>
         <p>{page.intro}</p>
         <div className="wiki-hero-actions">
-          <a className="primary-button" href="#page-content">Explore this page <ArrowRight weight="bold" /></a>
-          <a className="secondary-button" href="/">Back to home</a>
+          <a className="primary-button" href={firstChapter ? `${page.path}#${firstChapter}` : "#page-content"} onClick={(event) => { if (!firstChapter) return; event.preventDefault(); navigate(`${page.path}#${firstChapter}`); }}>Explore this page <ArrowRight weight="bold" /></a>
+          <a className="secondary-button" href="/home" onClick={(event) => { event.preventDefault(); navigate("/home"); }}>Back to home</a>
         </div>
       </div>
       <div className="wiki-hero-art" data-reveal>
@@ -31,48 +32,84 @@ export function ContentCard({ number, title, copy }) {
   return <article className="wiki-content-card" data-reveal><span>{number}</span><CheckCircle weight="duotone" /><h3>{title}</h3><p>{copy}</p></article>;
 }
 
-function HubCards({ page, children, navigate }) {
-  return (
-    <section className="wiki-hub-grid">
-      {children.map(([label, path], index) => (
-        <a href={path} onClick={(event) => { event.preventDefault(); navigate(path); }} className="wiki-hub-card" key={path} data-reveal>
-          <span>{String(index + 1).padStart(2, "0")}</span><h3>{label}</h3><p>Open the {label} page framework and replace reviewed placeholders as project material becomes available.</p><ArrowRight weight="bold" />
-        </a>
-      ))}
-      {!children.length && page.sections.map(([title, copy], index) => <ContentCard key={title} number={String(index + 1).padStart(2, "0")} title={title} copy={copy} />)}
-    </section>
-  );
-}
-
-function FigurePlaceholder({ page }) {
+function FigurePlaceholder({ chapter }) {
   return (
     <aside className="wiki-figure-slot" data-reveal>
       <div><ImageSquare weight="duotone" /><strong>Figure / data area</strong><span>Approved images, charts, diagrams, or tables will be placed here.</span></div>
-      <img src={page.image} alt="Decorative project illustration" />
+      <img src={chapter.image} alt="Decorative project illustration" />
     </aside>
   );
 }
 
+function PageContents({ page, activeId, open, setOpen, navigate }) {
+  return (
+    <aside className={`page-toc ${open ? "is-open" : ""}`} aria-label="On this page">
+      <button className="toc-mobile-toggle" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <span><List weight="bold" /> On this page</span><CaretDown weight="bold" />
+      </button>
+      <div className="toc-panel">
+        <span className="toc-kicker">On this page</span>
+        <strong>{page.group}</strong>
+        <nav>
+          {page.chapters.map((chapter, index) => (
+            <a className={activeId === chapter.id ? "active" : ""} href={`${page.path}#${chapter.id}`} key={chapter.id} onClick={(event) => { event.preventDefault(); navigate(`${page.path}#${chapter.id}`); setOpen(false); }}>
+              <span>{String(index + 1).padStart(2, "0")}</span>{chapter.title}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </aside>
+  );
+}
+
+function Chapter({ chapter, index }) {
+  const Icon = chapter.icon;
+  return (
+    <section className={`wiki-chapter chapter-${chapter.layout}`} id={chapter.id} data-chapter>
+      <header className="chapter-heading">
+        <span><Icon weight="duotone" /> {String(index + 1).padStart(2, "0")} · {chapter.eyebrow}</span>
+        <h2>{chapter.title}</h2>
+        <p>{chapter.intro}</p>
+      </header>
+      {chapter.metrics?.length > 0 && <div className="chapter-metrics">{chapter.metrics.map(([value, label]) => <article key={label}><strong>{value}</strong><span>{label}</span></article>)}</div>}
+      <div className="wiki-detail-layout">
+        <div className="wiki-section-grid">{chapter.sections.map(([title, copy], cardIndex) => <ContentCard key={`${chapter.id}-${title}`} number={String(cardIndex + 1).padStart(2, "0")} title={title} copy={copy} />)}</div>
+        <FigurePlaceholder chapter={chapter} />
+      </div>
+    </section>
+  );
+}
+
 export function WikiPage({ page, navigate }) {
-  const children = childrenFor(page.path);
+  const [activeId, setActiveId] = useState(() => window.location.hash.slice(1) || page.chapters[0]?.id || "");
+  const [tocOpen, setTocOpen] = useState(false);
+
+  useEffect(() => {
+    setActiveId(window.location.hash.slice(1) || page.chapters[0]?.id || "");
+    const sections = [...document.querySelectorAll("[data-chapter]")];
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]) setActiveId(visible[0].target.id);
+    }, { rootMargin: "-22% 0px -62% 0px", threshold: [0, .08, .25] });
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [page]);
+
   return (
     <main className={`wiki-page layout-${page.layout}`}>
-      <PageHero page={page} />
+      <PageHero page={page} navigate={navigate} />
       {page.metrics.length > 0 && <section className="wiki-metrics" aria-label="Page highlights">{page.metrics.map(([value, label]) => <article key={label}><strong>{value}</strong><span>{label}</span></article>)}</section>}
       <section className="wiki-page-content" id="page-content">
-        <SectionTitle kicker="Page framework" title={children.length ? `Explore ${page.group}` : "A complete first-version structure"} copy="The layout is ready for reviewed text, visuals, citations, and data without needing another redesign." />
-        {children.length ? <HubCards page={page} children={children} navigate={navigate} /> : (
-          <div className="wiki-detail-layout">
-            <div className="wiki-section-grid">{page.sections.map(([title, copy], index) => <ContentCard key={title} number={String(index + 1).padStart(2, "0")} title={title} copy={copy} />)}</div>
-            <FigurePlaceholder page={page} />
-          </div>
-        )}
+        <SectionTitle kicker="One page · clear chapters" title={`${page.group}, all in one place`} copy="Use the chapter menu to move through this page. Reviewed text, visuals, citations, and data can be added without creating another route." />
+        <div className="chapter-page-layout">
+          <PageContents page={page} activeId={activeId} open={tocOpen} setOpen={setTocOpen} navigate={navigate} />
+          <div className="chapter-stack">{page.chapters.map((chapter, index) => <Chapter chapter={chapter} index={index} key={chapter.id} />)}</div>
+        </div>
       </section>
       <section className="wiki-review-band">
         <div><span>Review workflow</span><h2>Draft → team check → teacher approval → publication</h2><p>Placeholder content is clearly separated from verified project claims.</p></div>
-        <a className="secondary-button" href="/" onClick={(event) => { event.preventDefault(); navigate("/"); }}>Return to homepage</a>
+        <a className="secondary-button" href="/home" onClick={(event) => { event.preventDefault(); navigate("/home"); }}>Return to homepage</a>
       </section>
     </main>
   );
 }
-
