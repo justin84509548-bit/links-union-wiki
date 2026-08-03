@@ -32,21 +32,6 @@ const heroMechanism = [
   [ShieldCheck, "Enamel protected", "Local action supports a healthier smile."],
 ];
 
-const team = [
-  ["BW", "Boxiang Wang", "CTO · Instructor"], ["JY", "JingYe", "Biological Mentor"],
-  ["WE", "Wendy", "Biological Mentor"], ["YC", "YenHaoChen", "Student Researcher"],
-  ["TW", "Tina Wang", "Student Researcher"], ["YW", "YIHE WU", "Student Researcher"],
-  ["AL", "Alina", "Student Researcher"], ["KL", "Kunxiao Li", "Student Researcher"],
-  ["RA", "RANJI", "Student Researcher"], ["WI", "Winnie", "Student Researcher"],
-  ["LU", "LUCERN", "Student Researcher"], ["KX", "Kiki Xinqi Lu", "Student Researcher"],
-  ["WY", "WU YUXUAN", "Student Researcher"], ["YS", "YUAN, SHIJIE", "Student Researcher"],
-  ["TK", "Tik Kong", "Student Researcher"], ["ZU", "Zuri", "Student Researcher"],
-  ["SS", "SueS", "Student Researcher"], ["QJ", "QU, JUE", "Student Researcher"],
-  ["AM", "Amber", "Student Researcher"], ["JF", "jingfeilin", "Student Researcher"],
-  ["LH", "Li HaoBo", "Student Researcher"], ["SD", "Shin Dongwon", "Student Researcher"],
-  ["EM", "Emily", "Student Researcher"],
-];
-
 const futureSections = [
   [Sparkle, "Human Practices", "Interviews, stakeholder feedback and the design changes they lead to."],
   [ShieldCheck, "Safety", "Risk assessment, organisms, materials and laboratory safety practices."],
@@ -671,21 +656,6 @@ export function App() {
                 <h3>{title}</h3>
                 <p>{guidance}</p>
                 <div className="empty-content-slot">Verified team content will be added here.</div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="section team-section" id="team" data-nav-neutral>
-          <div className="section-heading compact" data-reveal>
-            <span className="mini-label"><Sparkle weight="fill" /> Meet all 23 LINKS-UNION members</span>
-            <h2>Different disciplines.<br />One brighter smile.</h2>
-          </div>
-          <div className="team-grid">
-            {team.map(([initials, name, role], index) => (
-              <article className="person-card" key={name} data-reveal style={{ "--delay": `${index * 70}ms` }}>
-                <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>
-                <h3>{name}</h3><p>{role}</p>
               </article>
             ))}
           </div>

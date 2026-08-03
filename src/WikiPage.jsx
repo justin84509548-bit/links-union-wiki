@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, CaretDown, CheckCircle, ImageSquare, List, Sparkle } from "@phosphor-icons/react";
+import { teamMembers } from "./wikiData.jsx";
 
 export function PageHero({ page, navigate }) {
   const Icon = page.icon;
@@ -41,6 +42,22 @@ function FigurePlaceholder({ chapter }) {
   );
 }
 
+function MemberGrid() {
+  return (
+    <div className="chapter-member-block">
+      <header><span>23 PEOPLE · ONE TEAM</span><h3>Meet every LINKS–UNION member</h3><p>Roles will be expanded with individual introductions, photographs, interests, and verified contributions as materials are approved.</p></header>
+      <div className="team-grid chapter-team-grid">
+        {teamMembers.map(([initials, name, role], index) => (
+          <article className="person-card" key={name} data-reveal style={{ "--delay": `${index * 45}ms` }}>
+            <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>
+            <h3>{name}</h3><p>{role}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function PageContents({ page, activeId, open, setOpen, navigate }) {
   return (
     <aside className={`page-toc ${open ? "is-open" : ""}`} aria-label="On this page">
@@ -76,6 +93,7 @@ function Chapter({ chapter, index }) {
         <div className="wiki-section-grid">{chapter.sections.map(([title, copy], cardIndex) => <ContentCard key={`${chapter.id}-${title}`} number={String(cardIndex + 1).padStart(2, "0")} title={title} copy={copy} />)}</div>
         <FigurePlaceholder chapter={chapter} />
       </div>
+      {chapter.id === "members" && <MemberGrid />}
     </section>
   );
 }

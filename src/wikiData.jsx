@@ -43,6 +43,21 @@ export const navGroups = [
   },
 ];
 
+export const teamMembers = [
+  ["BW", "Boxiang Wang", "CTO · Instructor"], ["JY", "JingYe", "Biological Mentor"],
+  ["WE", "Wendy", "Biological Mentor"], ["YC", "YenHaoChen", "Student Researcher"],
+  ["TW", "Tina Wang", "Student Researcher"], ["YW", "YIHE WU", "Student Researcher"],
+  ["AL", "Alina", "Student Researcher"], ["KL", "Kunxiao Li", "Student Researcher"],
+  ["RA", "RANJI", "Student Researcher"], ["WI", "Winnie", "Student Researcher"],
+  ["LU", "LUCERN", "Student Researcher"], ["KX", "Kiki Xinqi Lu", "Student Researcher"],
+  ["WY", "WU YUXUAN", "Student Researcher"], ["YS", "YUAN, SHIJIE", "Student Researcher"],
+  ["TK", "Tik Kong", "Student Researcher"], ["ZU", "Zuri", "Student Researcher"],
+  ["SS", "SueS", "Student Researcher"], ["QJ", "QU, JUE", "Student Researcher"],
+  ["AM", "Amber", "Student Researcher"], ["JF", "jingfeilin", "Student Researcher"],
+  ["LH", "Li HaoBo", "Student Researcher"], ["SD", "Shin Dongwon", "Student Researcher"],
+  ["EM", "Emily", "Student Researcher"],
+];
+
 const sharedPlaceholder = "Content will be added after team and teacher review.";
 
 const page = (path, group, title, eyebrow, intro, icon, image, layout, sections, metrics = []) => ({

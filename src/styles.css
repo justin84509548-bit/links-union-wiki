@@ -337,6 +337,12 @@ a { color: inherit; }
 .wiki-chapter .wiki-content-card { min-height: 235px; }
 .chapter-timeline .wiki-section-grid, .chapter-roadmap .wiki-section-grid { grid-template-columns: 1fr; }
 .chapter-timeline .wiki-content-card, .chapter-roadmap .wiki-content-card { min-height: 165px; }
+.chapter-member-block { margin-top: 42px; padding-top: 42px; border-top: 2px dashed #d7d0f2; }
+.chapter-member-block > header { max-width: 720px; margin-bottom: 28px; }
+.chapter-member-block > header span { color: #68b8e5; font-size: 11px; font-weight: 900; letter-spacing: .12em; }
+.chapter-member-block > header h3 { margin: 9px 0 7px; color: #6253b0; font-size: clamp(30px,3.3vw,46px); line-height: 1; }
+.chapter-member-block > header p { color: #716d91; line-height: 1.65; }
+.chapter-team-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
 
 .site-footer { min-height: 170px; padding: 35px 5vw; display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 30px; align-items: center; }
 .site-footer > div { display: grid; gap: 5px; }.site-footer nav { display: flex; flex-wrap: wrap; gap: 10px 18px; }.site-footer a { color: #f2efff; font-size: 12px; font-weight: 800; text-decoration: none; }.site-footer a:hover { text-decoration: underline; }
@@ -345,6 +351,7 @@ a { color: inherit; }
   .brand { font-size: 17px; }.brand-avatar { width: 50px; height: 50px; }.nav-group-main > a { padding-inline: 6px; font-size: 11px; }.dropdown-toggle { width: 18px; }
   .wiki-page-hero { grid-template-columns: 1fr 1fr; gap: 36px; }.wiki-detail-layout { grid-template-columns: 1fr; }.wiki-figure-slot { min-height: 420px; position: static; grid-template-columns: .8fr 1.2fr; grid-template-rows: 1fr; }.wiki-figure-slot img { max-height: 350px; }
   .chapter-page-layout { grid-template-columns: 205px minmax(0,1fr); gap: 22px; }.wiki-chapter { padding: 36px; }
+  .chapter-team-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
 }
 
 @media (max-width: 780px) {
@@ -357,6 +364,7 @@ a { color: inherit; }
   .wiki-hero-art { width: 100%; aspect-ratio: 1.08; }.wiki-metrics { margin-top: -30px; grid-template-columns: 1fr; border-radius: 30px; }.wiki-metrics article { min-height: 78px; border-right: 0; border-bottom: 2px dashed #ddd7f3; }.wiki-metrics article:last-child { border-bottom: 0; }
   .wiki-page-content { padding: 78px 20px 88px; }.wiki-section-title { text-align: left; margin-bottom: 38px; }.wiki-section-title h2 { font-size: clamp(38px,11vw,47px); }
   .chapter-page-layout { display: block; }.page-toc { top: calc(86px + env(safe-area-inset-top)); margin-bottom: 24px; }.toc-mobile-toggle { width: 100%; min-height: 54px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; border: 2px solid #c9c0ef; border-radius: 20px; background: rgba(255,255,255,.96); color: #6554b2; font: 800 16px "Nunito"; box-shadow: 0 12px 30px rgba(92,76,166,.12); }.toc-mobile-toggle span { display: flex; align-items: center; gap: 8px; }.toc-mobile-toggle > svg { transition: transform .2s ease; }.page-toc.is-open .toc-mobile-toggle > svg { transform: rotate(180deg); }.toc-panel { display: none; margin-top: 8px; max-height: 55dvh; overflow-y: auto; border-radius: 22px; }.page-toc.is-open .toc-panel { display: block; }.toc-panel > .toc-kicker, .toc-panel > strong { display: none; }.toc-panel a { min-height: 48px; font-size: 13px; }.chapter-stack { gap: 28px; }.wiki-chapter { padding: 30px 20px; scroll-margin-top: calc(156px + env(safe-area-inset-top)); border-radius: 34px 25px 39px 28px; }.chapter-heading { margin-bottom: 26px; }.chapter-heading h2 { font-size: clamp(36px,10.8vw,48px); }.chapter-heading p { font-size: 15px; }.chapter-metrics { grid-template-columns: 1fr; }
+  .chapter-member-block { margin-top: 32px; padding-top: 30px; }.chapter-team-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }.chapter-team-grid .person-card { min-height: 175px; }
   .wiki-hub-grid, .wiki-section-grid { grid-template-columns: 1fr; }.wiki-hub-card { min-height: 210px; }.wiki-content-card { min-height: 230px; }.layout-data .wiki-content-card:nth-child(1) { grid-column: auto; }
   .layout-timeline .wiki-content-card, .layout-roadmap .wiki-content-card { min-height: 220px; padding: 78px 24px 24px; }.layout-timeline .wiki-content-card > svg, .layout-roadmap .wiki-content-card > svg { top: 24px; left: 24px; }
   .wiki-figure-slot { min-height: 400px; grid-template-columns: 1fr; grid-template-rows: auto 1fr; }.wiki-figure-slot img { max-height: 280px; }.wiki-review-band { margin: 0 20px 55px; padding: 35px 24px; display: grid; border-radius: 38px; }.wiki-review-band a { width: 100%; }
