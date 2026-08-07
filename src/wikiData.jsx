@@ -54,7 +54,7 @@ export const teamMembers = [
   ["TK", "Tik Kong", "Student Researcher"], ["ZU", "Zuri", "Student Researcher"],
   ["SS", "SueS", "Student Researcher"], ["QJ", "QU, JUE", "Student Researcher"],
   ["AM", "Amber", "Student Researcher"], ["JF", "jingfeilin", "Student Researcher"],
-  ["LH", "Li HaoBo", "Student Researcher"], ["SD", "Shin Dongwon", "Student Researcher"],
+  ["LH", "Li HaoBo", "Student Researcher", "/assets/lion-li.jpg", "I'm LionLi from BIGZ, 17 years old. My MBTI is ESTJ, and my hobby is scuba diving. iGEM honed my hands-on skills and made me a more qualified and outstanding scholar."], ["SD", "Shin Dongwon", "Student Researcher"],
   ["EM", "Emily", "Student Researcher"],
 ];
 
