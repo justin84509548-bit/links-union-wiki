@@ -8,42 +8,43 @@ export const navGroups = [
   { label: "Home", path: "/home" },
   {
     label: "Project", path: "/project", children: [
-      ["Description", "/project#description"], ["Contribution", "/project#contribution"],
-      ["Engineering", "/project#engineering"], ["Implementation", "/project#implementation"],
+      ["Description", "/project/description"], ["Contribution", "/project/contribution"],
+      ["Engineering", "/project/engineering"], ["Implementation", "/project/implementation"],
     ],
   },
   {
     label: "Wet Lab", path: "/wet-lab", children: [
-      ["Notebook", "/wet-lab#notebook"], ["Experiments / Protocol", "/wet-lab#experiments"],
-      ["Safety", "/wet-lab#safety"], ["Parts", "/wet-lab#parts"],
-      ["Measurement", "/wet-lab#measurement"],
+      ["Notebook", "/wet-lab/notebook"], ["Experiments / Protocol", "/wet-lab/experiments"],
+      ["Safety", "/wet-lab/safety"], ["Parts", "/wet-lab/parts"],
+      ["Measurement", "/wet-lab/measurement"],
     ],
   },
   { label: "Model", path: "/model" },
   {
     label: "Engagement", path: "/engagement", children: [
-      ["Integrated Human Practices", "/engagement#ihp"],
-      ["Entrepreneurship", "/engagement#entrepreneurship"], ["Education", "/engagement#education"],
+      ["Integrated Human Practices", "/engagement/ihp"],
+      ["Entrepreneurship", "/engagement/entrepreneurship"], ["Education", "/engagement/education"],
     ],
   },
   {
     label: "Team", path: "/team", children: [
-      ["Members", "/team#members"], ["Attributions", "/team#attributions"],
+      ["Members", "/team/members"], ["Attributions", "/team/attributions"],
     ],
   },
   {
     label: "Prizes", path: "/special-prizes", children: [
-      ["General Biological Engineering", "/special-prizes#general-bio-engineering"],
-      ["Best Model", "/special-prizes#best-model"],
-      ["Best New Improved Part", "/special-prizes#best-new-improved-part"],
-      ["Best New Basic Part", "/special-prizes#best-new-basic-part"],
-      ["Best Entrepreneurship", "/special-prizes#best-entrepreneurship"],
-      ["Best Integrated Human Practices", "/special-prizes#best-integrated-human-practices"],
+      ["General Biological Engineering", "/special-prizes/general-bio-engineering"],
+      ["Best Model", "/special-prizes/best-model"],
+      ["Best New Improved Part", "/special-prizes/best-new-improved-part"],
+      ["Best New Basic Part", "/special-prizes/best-new-basic-part"],
+      ["Best Entrepreneurship", "/special-prizes/best-entrepreneurship"],
+      ["Best Integrated Human Practices", "/special-prizes/best-integrated-human-practices"],
     ],
   },
 ];
 
 export const teamMembers = [
+  ["JS", "Justin", "Art & Design Group Co-leader", "/assets/justin-member.jpg", "Hi everyone! I’m Justin, a 16-year-old student at Shenzhen International Foundation College. In our iGEM team, I am one of the leaders of the Art and Design Group. I mainly work on the team’s Wiki, visual design, and task planning. Although handling several projects at the same time can be challenging, I enjoy turning our scientific ideas into designs that are clear, creative, and easy to understand. iGEM has also given me the opportunity to take part in laboratory work and learn more about biology through real experiments. For me, this experience is not only about science—it is also about creativity, teamwork, and learning how to take responsibility."],
   ["BW", "Boxiang Wang", "CTO · Instructor"], ["JY", "JingYe", "Biological Mentor"],
   ["WE", "Wendy", "Biological Mentor"], ["YC", "YenHaoChen", "Student Researcher"],
   ["TW", "Tina Wang", "Student Researcher"], ["YW", "YIHE WU", "Student Researcher"],
@@ -213,39 +214,11 @@ const legacyPages = [
   ]),
 ];
 
-const legacyByPath = Object.fromEntries(legacyPages.map((item) => [item.path, item]));
-
-const chapterRoutes = {
-  "/project": ["description", "contribution", "engineering", "implementation"],
-  "/wet-lab": ["notebook", "experiments", "safety", "parts", "measurement"],
-  "/engagement": ["ihp", "entrepreneurship", "education"],
-  "/team": ["members", "attributions"],
-  "/special-prizes": ["general-bio-engineering", "best-model", "best-new-improved-part", "best-new-basic-part", "best-entrepreneurship", "best-integrated-human-practices"],
-};
-
-function mergePage(path) {
-  const parent = legacyByPath[path];
-  const childSlugs = chapterRoutes[path] ?? [];
-  const chapters = childSlugs.length
-    ? childSlugs.map((slug) => {
-        const child = legacyByPath[`${path}/${slug}`];
-        return { ...child, id: slug };
-      })
-    : parent.sections.map(([title, copy], index) => ({
-        id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || `section-${index + 1}`,
-        title,
-        eyebrow: `${parent.group} section ${String(index + 1).padStart(2, "0")}`,
-        intro: copy,
-        icon: parent.icon,
-        image: parent.image,
-        layout: index % 2 ? "cards" : parent.layout,
-        sections: [["What this section will cover", copy], ["Evidence and visuals", sharedPlaceholder]],
-        metrics: [],
-      }));
-  return { ...parent, chapters };
-}
-
-export const wikiPages = ["/project", "/wet-lab", "/model", "/engagement", "/team", "/special-prizes"].map(mergePage);
+export const wikiPages = legacyPages;
 export const pageByPath = Object.fromEntries(wikiPages.map((item) => [item.path, item]));
+
+export function childrenFor(path) {
+  return navGroups.find((group) => group.path === path)?.children ?? [];
+}
 
 export const fallbackPage = page("/404", "Wiki", "This page is still finding its smile", "Page not found", "The requested page does not exist. Return home or use the navigation to continue exploring S.H.I.E.L.D.", Sparkle, "/assets/pointing.png", "cards", [["Return home", "Use the button below to go back to the LINKS–UNION homepage."]]);

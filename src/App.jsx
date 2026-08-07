@@ -250,14 +250,14 @@ function SiteHeader({ menuOpen, setMenuOpen, path, hash, navigate }) {
         </a>
         <div className={menuOpen ? "nav-links open" : "nav-links"}>
           {navGroups.map((group) => {
-            const active = group.path === "/home" ? path === "/" || path === "/home" : path === group.path;
+            const active = group.path === "/home" ? path === "/" || path === "/home" : path === group.path || path.startsWith(`${group.path}/`);
             return (
               <div className={`nav-group ${openGroup === group.path ? "expanded" : ""}`} key={group.path} onMouseEnter={() => group.children && setOpenGroup(group.path)} onMouseLeave={() => setOpenGroup("")}>
                 <div className="nav-group-main">
                   <a className={active ? "active" : ""} href={group.path} onClick={(event) => go(event, group.path)}>{group.label}</a>
                   {group.children && <button className="dropdown-toggle" onClick={() => setOpenGroup(openGroup === group.path ? "" : group.path)} aria-expanded={openGroup === group.path} aria-label={`Open ${group.label} menu`}><CaretDown weight="bold" /></button>}
                 </div>
-                {group.children && <div className="nav-dropdown">{group.children.map(([label, target]) => { const [targetPath, targetHash] = target.split("#"); return <a className={path === targetPath && hash === `#${targetHash}` ? "active" : ""} href={target} onClick={(event) => go(event, target)} key={target}>{label}<ArrowRight weight="bold" /></a>; })}</div>}
+                {group.children && <div className="nav-dropdown">{group.children.map(([label, target]) => { const [targetPath, targetHash] = target.split("#"); return <a className={path === targetPath && (!targetHash || hash === `#${targetHash}`) ? "active" : ""} href={target} onClick={(event) => go(event, target)} key={target}>{label}<ArrowRight weight="bold" /></a>; })}</div>}
               </div>
             );
           })}
