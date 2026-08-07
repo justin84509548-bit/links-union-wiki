@@ -44,9 +44,8 @@ export const navGroups = [
 ];
 
 export const teamMembers = [
-  ["JS", "Justin", "Art & Design Group Co-leader", "/assets/justin-member.jpg", "Hi everyone! I’m Justin, a 16-year-old student at Shenzhen International Foundation College. In our iGEM team, I am one of the leaders of the Art and Design Group. I mainly work on the team’s Wiki, visual design, and task planning. Although handling several projects at the same time can be challenging, I enjoy turning our scientific ideas into designs that are clear, creative, and easy to understand. iGEM has also given me the opportunity to take part in laboratory work and learn more about biology through real experiments. For me, this experience is not only about science—it is also about creativity, teamwork, and learning how to take responsibility."],
   ["BW", "Boxiang Wang", "CTO · Instructor"], ["JY", "JingYe", "Biological Mentor"],
-  ["WE", "Wendy", "Biological Mentor"], ["YC", "YenHaoChen", "Student Researcher"],
+  ["WE", "Wendy", "Biological Mentor"], ["YC", "YenHaoChen", "Art & Design Group Co-leader", "/assets/justin-member.jpg", "Hi everyone! I’m Justin, a 16-year-old student at Shenzhen International Foundation College. In our iGEM team, I am one of the leaders of the Art and Design Group. I mainly work on the team’s Wiki, visual design, and task planning. Although handling several projects at the same time can be challenging, I enjoy turning our scientific ideas into designs that are clear, creative, and easy to understand. iGEM has also given me the opportunity to take part in laboratory work and learn more about biology through real experiments. For me, this experience is not only about science—it is also about creativity, teamwork, and learning how to take responsibility."],
   ["TW", "Tina Wang", "Student Researcher"], ["YW", "YIHE WU", "Student Researcher"],
   ["AL", "Alina", "Student Researcher"], ["KL", "Kunxiao Li", "Student Researcher"],
   ["RA", "RANJI", "Student Researcher"], ["WI", "Winnie", "Student Researcher"],
