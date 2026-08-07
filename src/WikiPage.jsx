@@ -1,4 +1,5 @@
-import { ArrowRight, CheckCircle, ImageSquare, Sparkle } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { ArrowRight, CheckCircle, ImageSquare, Sparkle, X } from "@phosphor-icons/react";
 import { childrenFor, teamMembers } from "./wikiData.jsx";
 
 export function PageHero({ page, navigate }) {
@@ -53,17 +54,54 @@ function FigurePlaceholder({ page }) {
 }
 
 function MemberGrid() {
+  const [selectedMember, setSelectedMember] = useState(null);
+
+  useEffect(() => {
+    if (!selectedMember) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setSelectedMember(null);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [selectedMember]);
+
   return (
     <div className="chapter-member-block">
       <header><span>{teamMembers.length} PEOPLE · ONE TEAM</span><h3>Meet every LINKS–UNION member</h3><p>Roles will be expanded with individual introductions, photographs, interests, and verified contributions as materials are approved.</p></header>
       <div className="team-grid chapter-team-grid">
-        {teamMembers.map(([initials, name, role, photo, bio], index) => (
-          <article className={`person-card${photo ? " has-profile" : ""}`} key={name} data-reveal style={{ "--delay": `${index * 45}ms` }}>
-            {photo ? <img className="person-photo" src={photo} alt={`${name} with a deer`} /> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}
-            <div className={photo ? "person-copy" : undefined}><h3>{name}</h3><p className="person-role">{role}</p>{bio && <p className="person-bio">{bio}</p>}</div>
-          </article>
-        ))}
+        {teamMembers.map(([initials, name, role, photo, bio], index) => {
+          const cardContent = <>
+            <div className="person-media">{photo ? <img className="person-photo" src={photo} alt={`${name} portrait`} /> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}</div>
+            <div className="person-copy"><h3>{name}</h3><p className="person-role">{role}</p><span className="person-profile-hint">{bio ? "View profile" : "Profile coming soon"}</span></div>
+          </>;
+          return bio ? (
+            <button type="button" className="person-card person-card-button" key={name} data-reveal style={{ "--delay": `${index * 45}ms` }} onClick={() => setSelectedMember({ name, role, photo, bio })} aria-label={`View ${name}'s profile`}>
+              {cardContent}
+            </button>
+          ) : (
+            <article className="person-card" key={name} data-reveal style={{ "--delay": `${index * 45}ms` }}>{cardContent}</article>
+          );
+        })}
       </div>
+      {selectedMember && (
+        <div className="member-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedMember(null); }}>
+          <section className="member-modal" role="dialog" aria-modal="true" aria-labelledby="member-modal-title">
+            <button type="button" className="member-modal-close" onClick={() => setSelectedMember(null)} aria-label="Close profile"><X weight="bold" /></button>
+            {selectedMember.photo && <img className="member-modal-photo" src={selectedMember.photo} alt={`${selectedMember.name} portrait`} />}
+            <div className="member-modal-copy">
+              <span>LINKS–UNION MEMBER</span>
+              <h3 id="member-modal-title">{selectedMember.name}</h3>
+              <strong>{selectedMember.role}</strong>
+              <p>{selectedMember.bio}</p>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

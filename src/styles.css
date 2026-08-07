@@ -343,12 +343,29 @@ a { color: inherit; }
 .chapter-member-block > header h3 { margin: 9px 0 7px; color: #6253b0; font-size: clamp(30px,3.3vw,46px); line-height: 1; }
 .chapter-member-block > header p { color: #716d91; line-height: 1.65; }
 .chapter-team-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
-.chapter-team-grid .person-card.has-profile { grid-column: span 2; padding: 0; overflow: hidden; text-align: left; background: linear-gradient(145deg,#fff,#f4f1ff); }
-.person-photo { width: 100%; aspect-ratio: 16 / 9; display: block; object-fit: cover; object-position: 70% center; }
-.person-copy { padding: 22px 24px 25px; }
-.person-card.has-profile h3 { margin-bottom: 2px; font-size: 25px; }
+.chapter-team-grid .person-card { min-width: 0; min-height: 260px; padding: 0; display: grid; grid-template-rows: 142px 1fr; overflow: hidden; }
+.chapter-team-grid .person-card-button { width: 100%; border: 2px solid var(--line); color: inherit; font: inherit; cursor: pointer; }
+.person-media { min-height: 142px; display: grid; place-items: center; background: linear-gradient(145deg,#f3efff,#eaf9ff); overflow: hidden; }
+.person-media .person-avatar { margin: 0; }
+.person-photo { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 70% center; }
+.person-copy { min-width: 0; padding: 17px 15px 18px; display: grid; align-content: start; text-align: center; }
+.person-copy h3 { overflow-wrap: anywhere; }
 .person-card .person-role { color: #7868bd; font-weight: 900; }
-.person-card .person-bio { margin-top: 14px; color: #716d91; font-size: 13px; line-height: 1.65; }
+.person-profile-hint { margin-top: 11px; color: #76b8d9; font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.person-card-button .person-profile-hint { color: #6955bd; }
+.person-card-button:focus-visible { outline: 4px solid rgba(111,91,199,.28); outline-offset: 3px; }
+.member-modal-backdrop { position: fixed; inset: 0; z-index: 1000; padding: 28px; display: grid; place-items: center; background: rgba(53,42,91,.48); backdrop-filter: blur(10px); animation: member-backdrop-in .2s ease both; }
+.member-modal { width: min(940px,100%); max-height: min(720px,calc(100dvh - 56px)); position: relative; display: grid; grid-template-columns: minmax(300px,1.05fr) minmax(320px,.95fr); overflow: auto; border: 3px solid #c7bdf0; border-radius: 44px 34px 48px 36px; background: #fff; box-shadow: 0 30px 90px rgba(55,41,112,.28); animation: member-modal-in .25s ease both; }
+.member-modal-photo { width: 100%; height: 100%; min-height: 430px; object-fit: cover; object-position: 70% center; }
+.member-modal-copy { padding: 64px 48px 46px; align-self: center; }
+.member-modal-copy > span { color: #67b7e3; font-size: 11px; font-weight: 900; letter-spacing: .13em; }
+.member-modal-copy h3 { margin: 12px 0 2px; color: #6253b0; font-size: clamp(38px,4vw,56px); line-height: 1; }
+.member-modal-copy strong { color: #7b69c1; font-size: 15px; }
+.member-modal-copy p { margin-top: 24px; color: #66627f; font-size: 15px; line-height: 1.75; }
+.member-modal-close { width: 46px; height: 46px; position: absolute; top: 18px; right: 18px; z-index: 2; display: grid; place-items: center; border: 2px solid #c9c0ef; border-radius: 50%; background: rgba(255,255,255,.94); color: #6554b2; cursor: pointer; box-shadow: 0 8px 22px rgba(92,76,166,.14); }
+.member-modal-close svg { width: 21px; height: 21px; }
+@keyframes member-backdrop-in { from { opacity: 0; } }
+@keyframes member-modal-in { from { opacity: 0; transform: translateY(20px) scale(.97); } }
 
 .site-footer { min-height: 170px; padding: 35px 5vw; display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 30px; align-items: center; }
 .site-footer > div { display: grid; gap: 5px; }.site-footer nav { display: flex; flex-wrap: wrap; gap: 10px 18px; }.site-footer a { color: #f2efff; font-size: 12px; font-weight: 800; text-decoration: none; }.site-footer a:hover { text-decoration: underline; }
@@ -370,7 +387,7 @@ a { color: inherit; }
   .wiki-hero-art { width: 100%; aspect-ratio: 1.08; }.wiki-metrics { margin-top: -30px; grid-template-columns: 1fr; border-radius: 30px; }.wiki-metrics article { min-height: 78px; border-right: 0; border-bottom: 2px dashed #ddd7f3; }.wiki-metrics article:last-child { border-bottom: 0; }
   .wiki-page-content { padding: 78px 20px 88px; }.wiki-section-title { text-align: left; margin-bottom: 38px; }.wiki-section-title h2 { font-size: clamp(38px,11vw,47px); }
   .chapter-page-layout { display: block; }.page-toc { top: calc(86px + env(safe-area-inset-top)); margin-bottom: 24px; }.toc-mobile-toggle { width: 100%; min-height: 54px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; border: 2px solid #c9c0ef; border-radius: 20px; background: rgba(255,255,255,.96); color: #6554b2; font: 800 16px "Nunito"; box-shadow: 0 12px 30px rgba(92,76,166,.12); }.toc-mobile-toggle span { display: flex; align-items: center; gap: 8px; }.toc-mobile-toggle > svg { transition: transform .2s ease; }.page-toc.is-open .toc-mobile-toggle > svg { transform: rotate(180deg); }.toc-panel { display: none; margin-top: 8px; max-height: 55dvh; overflow-y: auto; border-radius: 22px; }.page-toc.is-open .toc-panel { display: block; }.toc-panel > .toc-kicker, .toc-panel > strong { display: none; }.toc-panel a { min-height: 48px; font-size: 13px; }.chapter-stack { gap: 28px; }.wiki-chapter { padding: 30px 20px; scroll-margin-top: calc(156px + env(safe-area-inset-top)); border-radius: 34px 25px 39px 28px; }.chapter-heading { margin-bottom: 26px; }.chapter-heading h2 { font-size: clamp(36px,10.8vw,48px); }.chapter-heading p { font-size: 15px; }.chapter-metrics { grid-template-columns: 1fr; }
-  .chapter-member-block { margin-top: 32px; padding-top: 30px; }.chapter-team-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }.chapter-team-grid .person-card { min-height: 175px; }.chapter-team-grid .person-card.has-profile { grid-column: 1 / -1; }.person-copy { padding: 18px 18px 21px; }.person-card .person-bio { font-size: 12px; }
+  .chapter-member-block { margin-top: 32px; padding-top: 30px; }.chapter-team-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }.chapter-team-grid .person-card { min-height: 228px; grid-template-rows: 118px 1fr; }.person-media { min-height: 118px; }.person-copy { padding: 14px 10px 15px; }.person-card h3 { font-size: 16px; }.person-card .person-role { font-size: 11px; }.person-profile-hint { margin-top: 8px; font-size: 8px; }.member-modal-backdrop { padding: 14px; }.member-modal { max-height: calc(100dvh - 28px); grid-template-columns: 1fr; border-radius: 30px 24px 34px 26px; }.member-modal-photo { height: min(42dvh,330px); min-height: 240px; }.member-modal-copy { padding: 31px 24px 32px; }.member-modal-copy p { margin-top: 18px; font-size: 14px; }.member-modal-close { top: 12px; right: 12px; }
   .wiki-hub-grid, .wiki-section-grid { grid-template-columns: 1fr; }.wiki-hub-card { min-height: 210px; }.wiki-content-card { min-height: 230px; }.layout-data .wiki-content-card:nth-child(1) { grid-column: auto; }
   .layout-timeline .wiki-content-card, .layout-roadmap .wiki-content-card { min-height: 220px; padding: 78px 24px 24px; }.layout-timeline .wiki-content-card > svg, .layout-roadmap .wiki-content-card > svg { top: 24px; left: 24px; }
   .wiki-figure-slot { min-height: 400px; grid-template-columns: 1fr; grid-template-rows: auto 1fr; }.wiki-figure-slot img { max-height: 280px; }.wiki-review-band { margin: 0 20px 55px; padding: 35px 24px; display: grid; border-radius: 38px; }.wiki-review-band a { width: 100%; }
