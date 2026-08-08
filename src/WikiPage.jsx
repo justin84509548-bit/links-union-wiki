@@ -74,13 +74,13 @@ function MemberGrid() {
     <div className="chapter-member-block">
       <header><span>{teamMembers.length} PEOPLE · ONE TEAM</span><h3>Meet every LINKS–UNION member</h3><p>Roles will be expanded with individual introductions, photographs, interests, and verified contributions as materials are approved.</p></header>
       <div className="team-grid chapter-team-grid">
-        {teamMembers.map(([initials, name, role, photo, bio], index) => {
+        {teamMembers.map(([initials, name, role, photo, bio, cardPosition, modalPosition], index) => {
           const cardContent = <>
-            <div className="person-media">{photo ? <img className="person-photo" src={photo} alt={`${name} portrait`} /> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}</div>
+            <div className="person-media">{photo ? <img className="person-photo" src={photo} alt={`${name} portrait`} style={{ objectPosition: cardPosition || "50% 35%" }} /> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}</div>
             <div className="person-copy"><h3>{name}</h3><p className="person-role">{role}</p><span className="person-profile-hint">{bio ? "View profile" : "Profile coming soon"}</span></div>
           </>;
           return bio ? (
-            <button type="button" className="person-card person-card-button" key={name} data-reveal style={{ "--delay": `${index * 45}ms` }} onClick={() => setSelectedMember({ name, role, photo, bio })} aria-label={`View ${name}'s profile`}>
+            <button type="button" className="person-card person-card-button" key={name} data-reveal style={{ "--delay": `${index * 45}ms` }} onClick={() => setSelectedMember({ name, role, photo, bio, modalPosition })} aria-label={`View ${name}'s profile`}>
               {cardContent}
             </button>
           ) : (
@@ -91,7 +91,7 @@ function MemberGrid() {
       {selectedMember && (
         <div className="member-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedMember(null); }}>
           <section className="member-modal" role="dialog" aria-modal="true" aria-labelledby="member-modal-title">
-            {selectedMember.photo && <img className="member-modal-photo" src={selectedMember.photo} alt={`${selectedMember.name} portrait`} />}
+            {selectedMember.photo && <img className="member-modal-photo" src={selectedMember.photo} alt={`${selectedMember.name} portrait`} style={{ objectPosition: selectedMember.modalPosition || "50% center" }} />}
             <div className="member-modal-copy">
               <span>LINKS–UNION MEMBER</span>
               <h3 id="member-modal-title">{selectedMember.name}</h3>
