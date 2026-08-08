@@ -76,7 +76,15 @@ function MemberGrid() {
       <div className="team-grid chapter-team-grid">
         {teamMembers.map(([initials, name, role, photo, bio, cardPosition, modalPosition], index) => {
           const cardContent = <>
-            <div className="person-media">{photo ? <img className="person-photo" src={photo} alt={`${name} portrait`} style={{ objectPosition: cardPosition || "50% 35%" }} /> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}</div>
+            <div className={`person-media${photo ? " person-media-cover" : ""}`}>
+              {photo ? <>
+                <img className="person-photo-backdrop" src={photo} alt="" aria-hidden="true" />
+                <span className="person-photo-frame">
+                  <img className="person-photo" src={photo} alt={`${name} portrait`} style={{ objectPosition: cardPosition || "50% 35%" }} />
+                </span>
+                <span className="person-cover-badge" aria-hidden="true">LINKS–UNION</span>
+              </> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}
+            </div>
             <div className="person-copy"><h3>{name}</h3><p className="person-role">{role}</p><span className="person-profile-hint">{bio ? "View profile" : "Profile coming soon"}</span></div>
           </>;
           return bio ? (
