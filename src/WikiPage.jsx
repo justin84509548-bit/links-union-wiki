@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, CheckCircle, ImageSquare, Sparkle, X } from "@phosphor-icons/react";
+import { ArrowRight, CheckCircle, ImageSquare, Sparkle } from "@phosphor-icons/react";
 import { childrenFor, teamMembers } from "./wikiData.jsx";
 
 export function PageHero({ page, navigate }) {
@@ -91,7 +91,6 @@ function MemberGrid() {
       {selectedMember && (
         <div className="member-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelectedMember(null); }}>
           <section className="member-modal" role="dialog" aria-modal="true" aria-labelledby="member-modal-title">
-            <button type="button" className="member-modal-close" onClick={() => setSelectedMember(null)} aria-label="Close profile"><X weight="bold" /></button>
             {selectedMember.photo && <img className="member-modal-photo" src={selectedMember.photo} alt={`${selectedMember.name} portrait`} />}
             <div className="member-modal-copy">
               <span>LINKS–UNION MEMBER</span>
