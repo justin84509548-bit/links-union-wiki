@@ -77,13 +77,15 @@ function MemberGrid() {
         {teamMembers.map(([initials, name, role, photo, bio, cardPosition, modalPosition], index) => {
           const cardContent = <>
             <div className={`person-media${photo ? " person-media-cover" : ""}`}>
-              {photo ? <>
-                <img className="person-photo-backdrop" src={photo} alt="" aria-hidden="true" />
-                <span className="person-photo-frame">
-                  <img className="person-photo" src={photo} alt={`${name} portrait`} style={{ objectPosition: cardPosition || "50% 35%" }} />
+              {photo ? <span className="person-profile-cover" aria-hidden="true">
+                <span className="person-cover-orbit person-cover-orbit-a" />
+                <span className="person-cover-orbit person-cover-orbit-b" />
+                <span className="person-cover-art">
+                  <img src="/assets/shield-tooth.png" alt="" />
+                  <strong>{initials}</strong>
                 </span>
-                <span className="person-cover-badge" aria-hidden="true">LINKS–UNION</span>
-              </> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}
+                <span className="person-cover-label">LINKS–UNION · MEMBER PROFILE</span>
+              </span> : <span className={`person-avatar avatar-${index % 4}`}>{initials}</span>}
             </div>
             <div className="person-copy"><h3>{name}</h3><p className="person-role">{role}</p><span className="person-profile-hint">{bio ? "View profile" : "Profile coming soon"}</span></div>
           </>;
