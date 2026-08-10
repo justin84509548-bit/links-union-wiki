@@ -48,7 +48,7 @@ export const teamMembers = [
   ["AX", "Amber Xie", "Student Researcher"],
   ["BW", "Boxiang Wang", "CTO · Instructor"],
   ["CW", "Cathy Wu", "Student Researcher"],
-  ["DS", "Dongwon Shin", "Student Researcher"],
+  ["DS", "Dongwon Shin", "Student Researcher", "/assets/dongwon-shin.jpg"],
   ["EW", "Elyn Wu", "Academic & Art Group Member", "/assets/elyn-wu.jpg", "My name is Elyn, and I am 15 years old, currently studying at Sendelta. In this iGEM project, I am a member of both the Academic Group and the Art Group. I joined iGEM because I wanted to explore how biology can be applied to solve real-world problems and gain experience with scientific experiments. Through this journey, I have learned how to use various experimental tools, conduct research, and cooperate effectively with teammates within a project. Outside iGEM, I enjoy drawing and reading. The skills I developed through iGEM, especially investigation and communication, will help me in future studies, research projects, and teamwork. I believe every experience shapes who we become. My favorite quote is, “The wind of freedom blows.”", "50% 78%", "50% 46%"],
   [
     "EL",
