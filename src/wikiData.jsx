@@ -44,7 +44,7 @@ export const navGroups = [
 ];
 
 export const teamMembers = [
-  ["AT", "Alina Tang", "Student Researcher"],
+  ["AT", "Alina Tang", "Student Researcher", "/assets/alina-tang.jpg"],
   ["AX", "Amber Xie", "Student Researcher"],
   ["BW", "Boxiang Wang", "CTO · Instructor"],
   ["CW", "Cathy Wu", "Student Researcher"],
