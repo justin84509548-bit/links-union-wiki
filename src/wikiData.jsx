@@ -44,7 +44,7 @@ export const navGroups = [
 ];
 
 export const teamMembers = [
-  ["AT", "Alina Tang", "Student Researcher", "/assets/alina-tang.jpg"],
+  ["AT", "Alina Tang", "Student Researcher", "/assets/alina-tang.jpg", "I’m Alina, a 15-year-old student from Shenzhen International School of Education and a member of our iGEM team. I joined iGEM hoping to build practical laboratory skills while exploring the fascinating field of synthetic biology. Through contributing to this project, I have gained hands-on experimental experience and internalized rigorous academic research methodologies. When I step away from the lab, snowboarding is my greatest passion. The research mindset and laboratory techniques I have gained from this iGEM journey will serve me well in future school assignments, case studies, and academic investigations alike. My favourite quote is, “Be the change that you wish to see in the world.” — Mahatma Gandhi.", "50% 42%", "50% center"],
   ["AX", "Amber Xie", "Student Researcher"],
   ["BW", "Boxiang Wang", "CTO · Instructor"],
   ["CW", "Cathy Wu", "Student Researcher"],
